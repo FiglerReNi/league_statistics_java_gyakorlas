@@ -58,7 +58,6 @@ public class LeagueStatistics {
     public static List<Player> getTopPlayersFromEachTeam(List<Team> teams) {
         return teams.stream()
                 .map(Team::getBestPlayer)
-                .sorted(Comparator.comparing(Player::getGoals).reversed())
                 .collect(Collectors.toList());
     }
 
@@ -82,7 +81,6 @@ public class LeagueStatistics {
     public static List<Player> getPlayersWithAtLeastXGoals(List<Team> teams, int goals) {
         return getAllPlayers(teams).stream()
                 .filter(p -> p.getGoals() >= goals)
-                .sorted(Comparator.comparing(Player::getGoals).reversed())
                 .collect(Collectors.toList());
     }
 

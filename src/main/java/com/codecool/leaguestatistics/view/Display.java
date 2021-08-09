@@ -5,6 +5,7 @@ import com.codecool.leaguestatistics.model.Division;
 import com.codecool.leaguestatistics.model.LeagueStatistics;
 import com.codecool.leaguestatistics.model.Player;
 import com.codecool.leaguestatistics.model.Team;
+import com.codecool.leaguestatistics.service.DisplayService;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -48,12 +49,12 @@ public class Display {
     }
 
     public void createTopPlayersFromEachTeamTable(List<Team> teams){
-        List<Player> playerForStat = LeagueStatistics.getTopPlayersFromEachTeam(teams);
+        List<Player> playerForStat = DisplayService.sortedPlayerReverseOrder(LeagueStatistics.getTopPlayersFromEachTeam(teams));
         createPlayersTable(playerForStat, "Top Players From Each Team");
     }
 
     public void createPlayersWithAtLeastXGoalsTable(List<Team> teams){
-        List<Player> playerForStat = LeagueStatistics.getPlayersWithAtLeastXGoals(teams, Utils.GOALS_STATISTIC_LIMIT);
+        List<Player> playerForStat = DisplayService.sortedPlayerReverseOrder(LeagueStatistics.getPlayersWithAtLeastXGoals(teams, Utils.GOALS_STATISTIC_LIMIT));
         createPlayersTable(playerForStat, "Players With At Least " + Utils.GOALS_STATISTIC_LIMIT + " Goals");
     }
 
