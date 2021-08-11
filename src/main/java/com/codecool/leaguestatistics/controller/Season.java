@@ -1,6 +1,8 @@
 package com.codecool.leaguestatistics.controller;
 
+import com.codecool.leaguestatistics.Utils;
 import com.codecool.leaguestatistics.factory.LeagueFactory;
+import com.codecool.leaguestatistics.model.Player;
 import com.codecool.leaguestatistics.model.Team;
 import com.codecool.leaguestatistics.view.Display;
 
@@ -15,6 +17,10 @@ public class Season {
 
     private List<Team> league;
     private final Display display;
+    private int scoredGoalsTeam1;
+    private int scoredGoalsTeam2;
+    private int sumSkillRate;
+    private int sumDefAbility;
 
     public Season() {
         league = new ArrayList<>();
@@ -56,8 +62,19 @@ public class Season {
      * Plays single game between two teams and displays result after.
      */
     private void playMatch(Team team1, Team team2) {
-        int scoredGoalsTeam1 = getScoredGoals(team1);
-        int scoredGoalsTeam2 = getScoredGoals(team2);
+        int roundNumber = Utils.getRandomValue(3, 6);
+        scoredGoalsTeam1 = 0;
+        scoredGoalsTeam2 = 0;
+        for (int i = 0; i < roundNumber; i++) {
+            sumSkillRate = 0;
+            sumDefAbility = 0;
+            int choice = Utils.getRandomValue(0, 2);
+            if (choice == 1) {
+                playRound(team1, team2, "team1");
+            } else {
+                playRound(team2, team1, "team2");
+            }
+        }
         if (scoredGoalsTeam1 > scoredGoalsTeam2) {
             team1.setWins(team1.getWins() + 1);
             team2.setLoses(team2.getLoses() + 1);
@@ -72,6 +89,18 @@ public class Season {
 
     }
 
+    private int getSumSkillRate(Team attacker) {
+        return attacker.getPlayers().stream()
+                .mapToInt(Player::getSkillRate)
+                .sum();
+    }
+
+    private int getSumDefAbility(Team defender) {
+        return defender.getPlayers().stream()
+                .mapToInt(Player::getDefAbility)
+                .sum();
+    }
+
     /**
      * Checks for each player of given team chance to score based on skillrate.
      * Adds scored goals to player's and team's statistics.
@@ -82,5 +111,28 @@ public class Season {
                 .filter(p -> p.getSkillRate() >= getRandomValue(1, 101))
                 .peek(p -> p.setGoals(p.getGoals() + 1))
                 .count();
+    }
+
+    private void playRound(Team attacker, Team defender, String team){
+        sumSkillRate = getSumSkillRate(attacker);
+        sumDefAbility = getSumDefAbility(defender);
+        if(sumSkillRate > sumDefAbility) {
+            switch(team){
+                case "team1":
+                    scoredGoalsTeam1 += getScoredGoals(attacker);
+                    break;
+                case "team2":
+                    scoredGoalsTeam2 += getScoredGoals(attacker);
+                    break;
+            }
+        }
+        setSumDefAbilityAfterRound(attacker);
+        setSumDefAbilityAfterRound(defender);
+    }
+
+    private void setSumDefAbilityAfterRound(Team team){
+        team.getPlayers()
+                .forEach(p-> p.setDefAbility(p.getDefAbility()-1));
+
     }
 }

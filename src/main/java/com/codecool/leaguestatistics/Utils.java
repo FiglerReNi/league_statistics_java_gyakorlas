@@ -7,7 +7,6 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Utils {
 
-    public static final int TEAM_SIZE = 11;
     public static final int TEAMS_STATISTIC_LIMIT = 3;
     public static final int GOALS_STATISTIC_LIMIT = 2;
 

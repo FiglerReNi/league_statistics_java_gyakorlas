@@ -25,9 +25,6 @@ public class Team {
         this.players = players;
     }
 
-    public Team() {
-    }
-
     /**
      * Helper method that finds best player with most scored goals in team
      */

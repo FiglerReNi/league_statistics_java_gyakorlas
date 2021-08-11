@@ -1,11 +1,6 @@
 package com.codecool.leaguestatistics.factory;
 
-import com.codecool.leaguestatistics.Utils;
-import com.codecool.leaguestatistics.model.Division;
-import com.codecool.leaguestatistics.model.Player;
-import com.codecool.leaguestatistics.model.Team;
-
-
+import com.codecool.leaguestatistics.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -27,7 +22,7 @@ public class LeagueFactory {
         IntStream.range(0, teamsInDivision)
                 .forEach(i -> {
                     Stream.of(Division.values()).forEach(
-                            d -> teams.add(new Team(d, getPlayers(Utils.TEAM_SIZE)))
+                            d -> teams.add(new Team(d, getPlayers()))
                     );
                 });
         return teams;
@@ -36,15 +31,21 @@ public class LeagueFactory {
     /**
      * Returns a collection with a given amount of newly created players
      */
-    private static List<Player> getPlayers(int amount) {
+    public static List<Player> getPlayers() {
         List<Player> players = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            players.add(new Player(getPlayerSkillRate()));
+        for (int i = 0; i < TeamComposition.GOALKEEPER.getValue(); i++) {
+            players.add(new Goalkeeper());
+        }
+        for (int i = 0; i < TeamComposition.DEFENDER.getValue(); i++) {
+            players.add(new Defender());
+        }
+        for (int i = 0; i < TeamComposition.MIDFIELDER.getValue(); i++) {
+            players.add(new Midfielder());
+        }
+        for (int i = 0; i < TeamComposition.ATTACKER.getValue(); i++) {
+            players.add(new Attacker());
         }
         return players;
     }
 
-    private static int getPlayerSkillRate() {
-        return Utils.getRandomValue(5, 21);
-    }
 }
